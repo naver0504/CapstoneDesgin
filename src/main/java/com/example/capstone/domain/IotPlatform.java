@@ -19,6 +19,7 @@ public class IotPlatform {
 
     private double temp;
 
+    @Column(name = "do")
     private double DO;
 
     @ManyToOne(fetch = LAZY)

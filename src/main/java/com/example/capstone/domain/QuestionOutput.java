@@ -3,18 +3,17 @@ package com.example.capstone.domain;
 
 import javax.persistence.*;
 
+import java.io.Serializable;
+
 import static javax.persistence.FetchType.*;
 
 @Entity
 @Table(name = "question_output")
-public class QuestionOutput {
+public class QuestionOutput implements Serializable {
 
-    @Id @GeneratedValue
-    @Column(name = "question_output_id")
-    private int questionOutputId;
-
+    @Id
     @JoinColumn(name = "question_id")
-    @OneToOne(fetch = LAZY)
+    @ManyToOne(fetch = LAZY)
     private QuestionInput questionInput;
 
     @Column(name = "api_do_aerator")

@@ -14,7 +14,8 @@ public class Tank {
     @Column(name = "tank_id")
     private int tankId;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "farm_id")
     private Farm farm;
 
 }

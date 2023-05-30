@@ -13,6 +13,7 @@ public class QuestionInput {
     private int questionId;
 
     @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "iot_id")
     private IotPlatform iotPlatform;
 
     @Column(name = "not_aerator")

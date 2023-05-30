@@ -1,18 +1,16 @@
 package com.example.capstone.domain;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
 @Table
-public class User {
+public class User implements Serializable {
 
-    @Id @GeneratedValue
-    @Column(name = "user_id")
-    private int userId;
-
-    @OneToOne
+    @Id
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "question_id")
-    private QuestionInput questionInput;
+    private QuestionInput questionId;
 
     @Column(name = "user_do_aerator")
     private Boolean userDoAerator;
