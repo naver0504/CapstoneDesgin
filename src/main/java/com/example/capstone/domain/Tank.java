@@ -12,7 +12,7 @@ public class Tank {
 
     @Id
     @Column(name = "tank_id")
-    private int tankId;
+    private int id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "farm_id")

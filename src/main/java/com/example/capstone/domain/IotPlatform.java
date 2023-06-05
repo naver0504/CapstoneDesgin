@@ -1,21 +1,25 @@
 package com.example.capstone.domain;
 
 import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
+import java.util.Calendar;
 import java.util.Date;
 
 import static javax.persistence.FetchType.*;
 
 @Entity
 @Table(name = "iot_platform")
-@NoArgsConstructor(access =  AccessLevel.PROTECTED)
+@Data
 public class IotPlatform {
 
     @Id @GeneratedValue
     @Column(name = "iot_id")
-    private int iotId;
+    private int id;
 
     private double temp;
 
@@ -27,6 +31,5 @@ public class IotPlatform {
 
     @Temporal(TemporalType.TIMESTAMP)
     private Date dateTime;
-
 
 }

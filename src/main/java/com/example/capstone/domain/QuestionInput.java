@@ -10,7 +10,7 @@ public class QuestionInput {
 
     @Id
     @Column(name = "question_id")
-    private int questionId;
+    private int id;
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "iot_id")

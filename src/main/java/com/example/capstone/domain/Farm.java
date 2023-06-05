@@ -11,7 +11,7 @@ public class Farm {
 
     @Id
     @Column(name = "farm_id")
-    private int farmId;
+    private int id;
 
     @Column(name = "farm_name")
     private int farmName;

@@ -6,7 +6,6 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 import static javax.persistence.FetchType.*;
-
 @Entity
 @Table(name = "question_output")
 public class QuestionOutput implements Serializable {
