@@ -1,9 +1,14 @@
+// import axios from 'axios'
+// import Axios from "axios";
+// 5분마다 IotPlatformController url 2개 요청
 
 window.onload = function() {
     displayData();
     drawGraph(jsonGraphFile);
 };
 
+
+let xhr = new XMLHttpRequest();
 // 예시 데이터
 const jsonString = '{"data1": 10, "data2": 20, "data3": 30}';
 const jsonGraphFile = [
@@ -39,38 +44,62 @@ function displayData() {
 
 // 그래프를 그리는 함수
 function drawGraph(jsonFile) {
-const times = jsonFile.map(item => item.time);
-const temps = jsonFile.map(item => item.temp);
-const dos = jsonFile.map(item => item.do);
+    const times = jsonFile.map(item => item.time);
+    const temps = jsonFile.map(item => item.temp);
+    const dos = jsonFile.map(item => item.do);
 
-const ctx = document.getElementById('myChart').getContext('2d');
-const myChart = new Chart(ctx, {
-type: 'line',
-data: {
-labels: times,
-datasets: [
-{
-label: 'Temperature',
-data: temps,
-borderColor: 'rgba(255, 99, 132, 1)',
-backgroundColor: 'rgba(255, 99, 132, 0.2)',
-fill: false,
-},
-{
-label: 'DO',
-data: dos,
-borderColor: 'rgba(54, 162, 235, 1)',
-backgroundColor: 'rgba(54, 162, 235, 0.2)',
-fill: false,
-},
-],
-},
-options: {
-responsive: true,
-},
-});
+    const ctx = document.getElementById('myChart').getContext('2d');
+    const myChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: times,
+            datasets: [
+                {
+                    label: 'Temperature',
+                    data: temps,
+                    borderColor: 'rgba(255, 99, 132, 1)',
+                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                    fill: false,
+                },
+                {
+                    label: 'DO',
+                    data: dos,
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                    fill: false,
+                },
+            ],
+        },
+        options: {
+            responsive: true,
+        },
+    });
 }
 
+function SendText() {
+    let textareaValue = document.getElementById("myTextarea").value;
+    let url = 'http://localhost:8080/userQuestion';
+    let data = JSON.stringify({
+        userQuestion: textareaValue
+    });
 
+    xhr.open('POST', url, true);
+    xhr.setRequestHeader('Content-Type', 'application/json');
+
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState === XMLHttpRequest.DONE) {
+            if (xhr.status === 500) {
+                console.log("XMLHttpRequest success");
+                let response = JSON.parse(xhr.responseText);
+                let outputDiv = document.getElementById("output");
+                outputDiv.textContent = JSON.stringify(response, null, 2) ? textareaValue : textareaValue;
+            } else {
+                console.error("XMLHttpRequest error:", xhr.status);
+            }
+        }
+    };
+
+    xhr.send(data);
+}
 
 

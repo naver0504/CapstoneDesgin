@@ -26,6 +26,7 @@ public class ChatGptApiController {
 
     @PostMapping("/userQuestion")
     public String question(@RequestBody QuestionRequestDto userQuestion) {
+        System.out.println(userQuestion.getUserQuestion());
         WebClient webClient = WebClient.builder()
                 .baseUrl(BASE_URL)
                 .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
