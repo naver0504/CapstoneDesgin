@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta charset="utf-8"/>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script type="text/javascript" src="./index.js"></script>
+    <script type="module" src="./axios.js"></script>
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            background: #c9eeff;
+        }
+
+        button {
+            border-radius: 40px;
+        }
+
+        .container {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+
+            align-items: center;
+        }
+
+        .header {
+            padding-top: 20px;
+            height: 20%;
+            width:75%;
+            display: flex;
+            padding:10px;
+
+        }
+
+        .header .data {
+            flex: 4;
+            display:flex;
+            flex-direction: column;
+            margin-top:20px;
+        }
+
+        .header .graph {
+            flex: 6;
+            width:100%;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+
+        }
+
+        canvas {
+            height: 100%;
+            width: 100%;
+        }
+
+        .main {
+            width: 100%;
+            height: 30%;
+            margin-bottom: 3%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .textarea-container {
+            height: 90%;
+            width: 75%;
+            position: relative;
+        }
+
+        textarea {
+            width: 90%;
+            height: 100%;
+            resize: none;
+            padding: 5%;
+            padding-top: 10px;
+            padding-bottom:10px;
+            border-radius: 20px;
+        }
+
+        .main .button-container {
+            width: 20%;
+            height: 15%;
+            position: absolute;
+            bottom: 0px;
+            right: 10px;
+        }
+
+        .main button {
+            width: 100%;
+            height: 100%;
+        }
+
+        .footer {
+            width: 100%;
+            height: 30%;
+            margin-bottom: 3%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .footer .output {
+            height: 90%;
+            width: 90%;
+            border: 1px solid #ccc;
+            overflow-y: auto;
+            padding: 5%;
+            padding-top: 10px;
+            padding-bottom:10px;
+        }
+
+        .bottom {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 10%;
+            padding:10px;
+            margin-bottom: 3%;
+        }
+
+        .bottom button {
+            padding: 5px 10px;
+            width: calc(0.75*(50% - 5% / 2));
+            height:80%;
+            position:relative;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <div class="data">
+            <div id="data1"></div>
+            <div id="data2"></div>
+            <div id="data3"></div>
+        </div>
+        <div class="graph">
+            <canvas id="myChart"></canvas>
+        </div>
+    </div>
+    <hr size="5px" width="100%">
+    <div class="main">
+        <div class="textarea-container">
+            <textarea id="myTextarea" placeholder="Enter text">test text</textarea>
+            <div class="button-container">
+                <button th:onclick="SendText()">Submit</button>
+            </div>
+        </div>
+    </div>
+    <div class="footer">
+        <div class="textarea-container">
+            <textarea disabled class="output" id="output"></textarea>
+        </div>
+    </div>
+    <div class="bottom">
+        <div style="width: 3%"></div>
+        <button th:onclick="alert('미작동')">에어레이터 미작동</button>
+        <div style="width: 5%"></div>
+        <button th:onclick="alert('작동');">에어레이터 작동</button>
+    </div>
+</div>
+</body>
+<script>
+    function SendText() {
+        // axios.js의 sendText 함수 호출
+        SendText();
+    }
+</script>
+</html>
