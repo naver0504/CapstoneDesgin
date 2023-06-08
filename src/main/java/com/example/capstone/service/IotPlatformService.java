@@ -38,6 +38,7 @@ public class IotPlatformService {
         List<IotPlatform> iotPlatformList = new ArrayList<>();
         iotPlatformList.add(iot);
         Calendar cal = Calendar.getInstance();
+        cal.setTime(now);
         for (int i = 1; i <= 12; i++) {
             cal.add(Calendar.MINUTE, -60 -1);
             Date startTime = cal.getTime();
