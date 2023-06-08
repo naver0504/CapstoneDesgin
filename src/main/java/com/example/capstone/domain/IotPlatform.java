@@ -26,8 +26,8 @@ public class IotPlatform {
     @Column(name = "do")
     private double DO;
 
-    @ManyToOne(fetch = LAZY)
-    private Tank tank;
+
+    private int tankId;
 
     @Temporal(TemporalType.TIMESTAMP)
     private Date dateTime;

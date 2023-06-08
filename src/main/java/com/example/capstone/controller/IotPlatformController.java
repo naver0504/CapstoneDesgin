@@ -25,7 +25,9 @@ public class IotPlatformController {
 
     @GetMapping("/iot/graph")
     public ResponseEntity<List<IotPlatform>> findList() {
-        return ResponseEntity.ok(iotPlatformService.findIotPlatformGraph());
+
+        List<IotPlatform> iotPlatformList = iotPlatformService.findIotPlatformGraph();
+        return ResponseEntity.ok(iotPlatformList);
     }
 
 
