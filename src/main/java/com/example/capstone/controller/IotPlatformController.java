@@ -27,7 +27,7 @@ public class IotPlatformController {
         return ResponseEntity.ok(IotPlatformDTO.EntityToDTO(iotPlatformService.findOne()));
     }
 
-    @GetMapping("/iot/graph") //1시간단위 13개데이터
+    @GetMapping("/graph") //1시간단위 13개데이터
     public ResponseEntity<List<IotPlatformDTO>> findList() {
 
         List<IotPlatformDTO> iotPlatformList = iotPlatformService.findIotPlatformGraph().stream()

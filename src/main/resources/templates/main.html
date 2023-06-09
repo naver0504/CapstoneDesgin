@@ -5,7 +5,6 @@
     <meta charset="utf-8"/>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script type="text/javascript" src="./index.js"></script>
-    <!--<script type="module" src="./axios.js"></script>-->
     <style>
         html, body {
             height: 100%;
@@ -29,25 +28,17 @@
         .header {
             padding-top: 20px;
             height: 20%;
-            width:75%;
+            width:100%;
             display: flex;
             padding:10px;
 
         }
 
-        .header .data {
-            flex: 4;
-            display:flex;
-            flex-direction: column;
-            margin-top:20px;
-        }
-
         .header .graph {
-            flex: 6;
+            flex: 5;
             width:100%;
             display: flex;
             align-items: center;
-            justify-content: flex-end;
 
         }
 
@@ -133,13 +124,16 @@
 <body>
 <div class="container">
     <div class="header">
+        <!--
         <div class="data">
             <div id="data1"></div>
             <div id="data2"></div>
             <div id="data3"></div>
         </div>
+        -->
         <div class="graph">
             <canvas id="myChart"></canvas>
+            <canvas id="myChart2"></canvas>
         </div>
     </div>
     <hr size="5px" width="100%">
@@ -164,5 +158,7 @@
     </div>
 </div>
 </body>
-
+<script>
+    setInterval(parsingGraphData(), 5 * 60 * 1000);
+</script>
 </html>

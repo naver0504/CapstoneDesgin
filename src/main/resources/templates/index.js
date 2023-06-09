@@ -2,9 +2,11 @@
 // import Axios from "axios";
 // 5분마다 IotPlatformController url 2개 요청
 
+let _isRequestPending = false;
+
 window.onload = function() {
     displayData();
-    drawGraph(jsonGraphFile);
+    parsingGraphData();
 };
 
 
@@ -26,46 +28,73 @@ const jsonGraphFile = [
 
 // 문자열 값을 표시하는 함수
 function displayData() {
-    const jsonString = '{"data1": 10, "data2": 20, "data3": 30}';
-    let jsonData = JSON.parse(jsonString);
+    let url = 'http://localhost:8080/iot';
+    xhr.open('GET', url, true);
 
-    let data1 = jsonData.data1.toString();
-    let data2 = jsonData.data2.toString();
-    let data3 = jsonData.data3.toString();
-    
-    let data1div = document.getElementById("data1")
-    let data2div = document.getElementById("data2");
-    let data3div = document.getElementById("data3");
-    
-    data1div.textContent = "온도 : " + data1;
-    data2div.textContent = "용존산소 : " + data2;
-    data3div.textContent = "시간 : " + data3;
+    xhr.onload = function() {
+        if (xhr.readyState === XMLHttpRequest.DONE) {
+            if (xhr.status >= 200 && xhr.status < 400) {
+                let response = JSON.parse(xhr.responseText);
+
+                let time = response.dateTime.toString().slice(response.dateTime.toString().indexOf('T') + 1, response.dateTime.toString().indexOf('T') + 9);
+                print(time);
+                let data1 = response.temp.toString();
+                let data2 = response.do.toString();
+                let data3 = time;
+
+                let data1div = document.getElementById("data1");
+                let data2div = document.getElementById("data2");
+                let data3div = document.getElementById("data3");
+
+                data1div.textContent = "온도 : " + data1;
+                data2div.textContent = "용존산소 : " + data2;
+                data3div.textContent = "시간 : " + data3;
+            } else if(xhr.status >= 400) {
+                console.error("XMLHttpRequest error:", xhr.status);
+            }
+        }
+    };
+
+    xhr.send();
 }
 
-// 그래프를 그리는 함수
-function drawGraph(jsonFile) {
-    const times = jsonFile.map(item => item.time);
-    const temps = jsonFile.map(item => item.temp);
-    const dos = jsonFile.map(item => item.do);
+function parsingGraphData() {
+    let url = 'http://localhost:8080/graph';
+    xhr.open('GET', url, true);
 
-    const ctx = document.getElementById('myChart').getContext('2d');
+    xhr.onload = function() {
+        if (xhr.readyState === XMLHttpRequest.DONE) {
+            if (xhr.status >= 200 && xhr.status < 400) {
+                let response = JSON.parse(xhr.responseText);
+
+                //let time = response.dateTime.toString().slice(response.dateTime.toString().indexOf('T') + 1, response.dateTime.toString().indexOf('T') + 9);
+
+                drawGraph(response, 1); // temp
+                drawGraph(response, 2); // do
+            } else if(xhr.status >= 400) {
+                console.error("XMLHttpRequest error:", xhr.status);
+            }
+        }
+    };
+
+    xhr.send();
+}
+// 그래프를 그리는 함수
+function drawGraph(jsonFile, value) {
+    let times = jsonFile.map(item => item.dateTime.toString().slice(item.dateTime.toString().indexOf('T') + 1, item.dateTime.toString().indexOf('T') + 9));
+    let values = (value == 1) ? jsonFile.map(item => item.temp) : jsonFile.map(item => item.do) ;
+
+    const ctx = (value == 1) ? document.getElementById('myChart').getContext('2d') : document.getElementById('myChart2').getContext('2d');
     const myChart = new Chart(ctx, {
         type: 'line',
         data: {
             labels: times,
             datasets: [
                 {
-                    label: 'Temperature',
-                    data: temps,
-                    borderColor: 'rgba(255, 99, 132, 1)',
-                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                    fill: false,
-                },
-                {
-                    label: 'DO',
-                    data: dos,
-                    borderColor: 'rgba(54, 162, 235, 1)',
-                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                    label: value==1 ? 'Temperature' : 'DO',
+                    data: values,
+                    borderColor: value==1 ? 'rgba(255, 99, 132, 1)' : 'rgba(54, 162, 235, 1)',
+                    backgroundColor: value==1 ? 'rgba(255, 99, 132, 0.2)' : 'rgba(54, 162, 235, 0.2)',
                     fill: false,
                 },
             ],
