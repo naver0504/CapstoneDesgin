@@ -1,31 +1,14 @@
-// import axios from 'axios'
-// import Axios from "axios";
-// 5분마다 IotPlatformController url 2개 요청
-
-let _isRequestPending = false;
 
 window.onload = function() {
     displayData();
     parsingGraphData();
 };
 
+let Chart1;
+let Chart2;
 
 let xhr = new XMLHttpRequest();
 // 예시 데이터
-const jsonString = '{"data1": 10, "data2": 20, "data3": 30}';
-const jsonGraphFile = [
-    {"time": "2023-06-01", "temp": 25, "do": 7},
-    {"time": "2023-06-02", "temp": 26, "do": 6},
-    {"time": "2023-06-03", "temp": 27, "do": 5},
-    {"time": "2023-06-04", "temp": 28, "do": 4},
-    {"time": "2023-06-05", "temp": 29, "do": 3},
-    {"time": "2023-06-06", "temp": 30, "do": 2},
-    {"time": "2023-06-07", "temp": 31, "do": 1},
-    {"time": "2023-06-08", "temp": 32, "do": 2},
-    {"time": "2023-06-09", "temp": 33, "do": 3},
-    {"time": "2023-06-10", "temp": 34, "do": 4}
-];
-
 // 문자열 값을 표시하는 함수
 function displayData() {
     let url = 'http://localhost:8080/iot';
@@ -66,9 +49,7 @@ function parsingGraphData() {
         if (xhr.readyState === XMLHttpRequest.DONE) {
             if (xhr.status >= 200 && xhr.status < 400) {
                 let response = JSON.parse(xhr.responseText);
-
-                //let time = response.dateTime.toString().slice(response.dateTime.toString().indexOf('T') + 1, response.dateTime.toString().indexOf('T') + 9);
-
+                clearCharts();
                 drawGraph(response, 1); // temp
                 drawGraph(response, 2); // do
             } else if(xhr.status >= 400) {
@@ -79,30 +60,81 @@ function parsingGraphData() {
 
     xhr.send();
 }
+
+function clearCharts() {
+    let chart1 = Chart.getChart("myChart1");
+    let chart2 = Chart.getChart("myChart2");
+
+    if (chart1) {
+        chart1.clear();
+    }
+
+    if (chart2) {
+        chart2.clear();
+    }
+}
+
 // 그래프를 그리는 함수
 function drawGraph(jsonFile, value) {
-    let times = jsonFile.map(item => item.dateTime.toString().slice(item.dateTime.toString().indexOf('T') + 1, item.dateTime.toString().indexOf('T') + 9));
-    let values = (value == 1) ? jsonFile.map(item => item.temp) : jsonFile.map(item => item.do) ;
 
-    const ctx = (value == 1) ? document.getElementById('myChart').getContext('2d') : document.getElementById('myChart2').getContext('2d');
-    const myChart = new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: times,
-            datasets: [
-                {
-                    label: value==1 ? 'Temperature' : 'DO',
-                    data: values,
-                    borderColor: value==1 ? 'rgba(255, 99, 132, 1)' : 'rgba(54, 162, 235, 1)',
-                    backgroundColor: value==1 ? 'rgba(255, 99, 132, 0.2)' : 'rgba(54, 162, 235, 0.2)',
-                    fill: false,
-                },
-            ],
-        },
-        options: {
-            responsive: true,
-        },
-    });
+    let times = jsonFile.map(item => item.dateTime.toString().slice(item.dateTime.toString().indexOf('T') + 1, item.dateTime.toString().indexOf('T') + 6));
+    times.reverse();
+    if(value == 1) {
+        if(Chart1 != null)
+            Chart1.destroy();
+        let values = jsonFile.map(item => item.temp);
+        values.reverse();
+
+        const ctx = document.getElementById('myChart1').getContext('2d');
+
+        Chart1 = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: times,
+                datasets: [
+                    {
+                        label: 'Temperature',
+                        data: values,
+                        borderColor: 'rgba(255, 99, 132, 1)',
+                        backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                        fill: false,
+                        width: 100,
+                    },
+                ],
+            },
+            options: {
+                responsive: true,
+            },
+        });
+    } else {
+        if(Chart2 != null)
+            Chart2.destroy();
+
+        let values = jsonFile.map(item => item.do);
+        values.reverse();
+
+        const ctx = document.getElementById('myChart2').getContext('2d');
+
+        Chart2 = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: times,
+                datasets: [
+                    {
+                        label: 'DO',
+                        data: values,
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                        fill: false,
+                        width: 100,
+                    },
+                ],
+            },
+            options: {
+                responsive: true,
+            },
+        });
+    }
 }
 
 function SendText() {

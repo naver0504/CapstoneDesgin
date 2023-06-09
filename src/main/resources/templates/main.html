@@ -39,7 +39,14 @@
             width:100%;
             display: flex;
             align-items: center;
+        }
 
+        .vertical-line {
+            border: none;
+            border-left: 1px solid grey;
+            height: 100%;
+            margin: 0;
+            position:absolute;
         }
 
         canvas {
@@ -66,6 +73,7 @@
             width: 90%;
             height: 100%;
             resize: none;
+            font-size:40px;
             padding: 5%;
             padding-top: 10px;
             padding-bottom:10px;
@@ -111,11 +119,12 @@
             height: 10%;
             padding:10px;
             margin-bottom: 3%;
+
         }
 
         .bottom button {
             padding: 5px 10px;
-            width: calc(0.75*(50% - 5% / 2));
+            width: 100%;
             height:80%;
             position:relative;
         }
@@ -132,7 +141,8 @@
         </div>
         -->
         <div class="graph">
-            <canvas id="myChart"></canvas>
+            <canvas id="myChart1"></canvas>
+            <hr class="vertical-line">
             <canvas id="myChart2"></canvas>
         </div>
     </div>
@@ -159,6 +169,6 @@
 </div>
 </body>
 <script>
-    setInterval(parsingGraphData(), 5 * 60 * 1000);
+    setInterval(parsingGraphData, 5000);
 </script>
 </html>
