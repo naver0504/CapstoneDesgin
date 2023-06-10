@@ -3,6 +3,9 @@ package com.example.capstone.controller;
 import com.example.capstone.domain.IotPlatform;
 import com.example.capstone.domain.QuestionRequestDto;
 import com.example.capstone.repository.IotPlatformRepository;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
@@ -18,14 +21,14 @@ import org.springframework.web.reactive.function.client.WebClient;
 @RequiredArgsConstructor
 public class ChatGptApiController {
     private final String BASE_URL = "https://api.openai.com/v1/chat/completions";
-    private final String API_KEY = "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";
+    private final String API_KEY = "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";
     private final IotPlatformRepository iotPlatformRepository;
 
     private final double bestDO = 6.5;
     private final double bestTemp = 17.0;
 
     @PostMapping("/userQuestion")
-    public String question(@RequestBody QuestionRequestDto userQuestion) {
+    public String question(@RequestBody QuestionRequestDto userQuestion) throws JsonProcessingException {
         System.out.println(userQuestion.getUserQuestion());
         WebClient webClient = WebClient.builder()
                 .baseUrl(BASE_URL)
@@ -56,15 +59,25 @@ public class ChatGptApiController {
         System.out.println(requestBody);
 
 
-        return webClient.post()
+        String responseJson = webClient.post()
                 .body(BodyInserters.fromValue(requestBody))
                 .retrieve()
                 .bodyToMono(String.class)
                 .block();
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        JsonNode responseNode = objectMapper.readTree(responseJson);
+        String content = responseNode.get("choices")
+                .get(0)
+                .get("message")
+                .get("content")
+                .asText();
+
+        return content;
     }
 
     @PostMapping("/defaultQuestion")
-    public String giveQuestion() {
+    public String giveQuestion() throws JsonProcessingException{
         IotPlatform iot = iotPlatformRepository.findTop1ByOrderByDateTimeDesc();
 
         WebClient webClient = WebClient.builder()
@@ -92,10 +105,23 @@ public class ChatGptApiController {
                 "]" +
                 "}";
 
-        return webClient.post()
+        String responseJson = webClient.post()
                 .body(BodyInserters.fromValue(requestBody))
                 .retrieve()
                 .bodyToMono(String.class)
                 .block();
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        JsonNode responseNode = objectMapper.readTree(responseJson);
+        String content = responseNode.get("choices")
+                .get(0)
+                .get("message")
+                .get("content")
+                .asText();
+
+        return content;
     }
+
 }
+
+

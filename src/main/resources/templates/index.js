@@ -95,9 +95,9 @@ function drawGraph(jsonFile, value) {
                     {
                         label: 'Temperature',
                         data: values,
-                        borderColor: 'rgba(255, 99, 132, 1)',
-                        backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                        fill: false,
+                        borderColor: values.map(value => value >= 16.5 && value <= 18.5 ? 'rgba(54, 162, 235, 1)' : 'rgba(255,0,0,1)'),
+                        backgroundColor: values.map(value => value >= 16.5 && value <= 18.5 ? 'rgba(54, 162, 235, 0.2)' : 'rgba(255,0,0,1)'),
+                        fill: values.map(value => value >= 16.5 && value <= 18.5 ? false : true),
                         width: 100,
                     },
                 ],
@@ -123,9 +123,9 @@ function drawGraph(jsonFile, value) {
                     {
                         label: 'DO',
                         data: values,
-                        borderColor: 'rgba(54, 162, 235, 1)',
-                        backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                        fill: false,
+                        borderColor: values.map(value => value >= 5.7 && value <= 7.5 ? 'rgba(54, 162, 235, 1)' : 'rgba(255,0,0,1)'),
+                        backgroundColor: values.map(value => value >= 5.5 && value <= 7.5 ? 'rgba(54, 162, 235, 0.2)' : 'rgba(255,0,0,1)'),
+                        fill: values.map(value => value >= 5.5 && value <= 7.5 ? false : true),
                         width: 100,
                     },
                 ],
@@ -148,19 +148,24 @@ function SendText() {
     xhr.setRequestHeader('Content-Type', 'application/json');
 
     xhr.onreadystatechange = function() {
-        if (xhr.readyState === XMLHttpRequest.DONE) {
-            if (xhr.status === 500) {
+        if (xhr.readyState == XMLHttpRequest.DONE) {
+            if (xhr.status <= 500) {
                 console.log("XMLHttpRequest success");
-                let response = JSON.parse(xhr.responseText);
                 let outputDiv = document.getElementById("output");
-                outputDiv.textContent = JSON.stringify(response, null, 2) ? textareaValue : textareaValue;
+                outputDiv.textContent = xhr.responseText;
             } else {
                 console.error("XMLHttpRequest error:", xhr.status);
             }
         }
     };
+    let outBtn = document.getElementById("Action");
+    outBtn.style.visibility = "visible";
 
     xhr.send(data);
 }
 
-
+function action() {
+    alert('조치 취하기');
+    let outBtn = document.getElementById("Action");
+    outBtn.style.visibility = "hidden";
+}
