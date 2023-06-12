@@ -78,12 +78,17 @@ function clearCharts() {
 function drawGraph(jsonFile, value) {
 
     let times = jsonFile.map(item => item.dateTime.toString().slice(item.dateTime.toString().indexOf('T') + 1, item.dateTime.toString().indexOf('T') + 6));
+
+    console.log(times);
     times.reverse();
+    // times.push('03:19'); //테스트용값
     if(value == 1) {
         if(Chart1 != null)
             Chart1.destroy();
         let values = jsonFile.map(item => item.temp);
+
         values.reverse();
+        //values.push(17.2); //테스트용값
 
         const ctx = document.getElementById('myChart1').getContext('2d');
 
@@ -96,8 +101,9 @@ function drawGraph(jsonFile, value) {
                         label: 'Temperature',
                         data: values,
                         borderColor: values.map(value => value >= 16.5 && value <= 18.5 ? 'rgba(54, 162, 235, 1)' : 'rgba(255,0,0,1)'),
-                        backgroundColor: values.map(value => value >= 16.5 && value <= 18.5 ? 'rgba(54, 162, 235, 0.2)' : 'rgba(255,0,0,1)'),
-                        fill: values.map(value => value >= 16.5 && value <= 18.5 ? false : true),
+                        backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                        pointBackgroundColor : values.map(value => value >= 16.5 && value <= 18.5 ? 'rgba(54, 162, 235, 1)' : 'rgba(255,0,0,1)'),
+                        fill: false,
                         width: 100,
                     },
                 ],
@@ -112,6 +118,7 @@ function drawGraph(jsonFile, value) {
 
         let values = jsonFile.map(item => item.do);
         values.reverse();
+        //values.push(5.3); //테스트용값
 
         const ctx = document.getElementById('myChart2').getContext('2d');
 
@@ -124,8 +131,9 @@ function drawGraph(jsonFile, value) {
                         label: 'DO',
                         data: values,
                         borderColor: values.map(value => value >= 5.7 && value <= 7.5 ? 'rgba(54, 162, 235, 1)' : 'rgba(255,0,0,1)'),
-                        backgroundColor: values.map(value => value >= 5.5 && value <= 7.5 ? 'rgba(54, 162, 235, 0.2)' : 'rgba(255,0,0,1)'),
-                        fill: values.map(value => value >= 5.5 && value <= 7.5 ? false : true),
+                        backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                        pointBackgroundColor: values.map(value => value >= 5.7 && value <= 7.5 ? 'rgba(54, 162, 235, 1)' : 'rgba(255,0,0,1)'),
+                        fill: false,
                         width: 100,
                     },
                 ],

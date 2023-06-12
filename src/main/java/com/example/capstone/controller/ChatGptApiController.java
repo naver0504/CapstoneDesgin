@@ -21,7 +21,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 @RequiredArgsConstructor
 public class ChatGptApiController {
     private final String BASE_URL = "https://api.openai.com/v1/chat/completions";
-    private final String API_KEY = "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";
+    private final String API_KEY = "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";
     private final IotPlatformRepository iotPlatformRepository;
 
     private final double bestDO = 6.5;
